@@ -54,6 +54,9 @@ const UserController = {
     deleteUser: async (req, res) => {
         try {
             await User.findByIdAndDelete(req.params.id)
+            // if user from token : 
+            // user.role.lowercase() !== "admin" => 
+            //     res.status(401).json({ error: "not authorized " });
             res.status(200).json('User deleted')
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -70,7 +73,6 @@ const UserController = {
             if (bcrypt.compareSync(req.body.password, user.password)) {
                 const token = jwt.sign({
                     userId: user.id,
-                    role: user.role
                 },
                     "oknhgvgijnkazertyuioqsdfghjkl", //secret key
                     {
@@ -79,8 +81,8 @@ const UserController = {
                 )
 
                 res.status(200).send({
+                    name: user.name,
                     email: user.email,
-                    role: user.role,
                     token: token,
                 })
 
@@ -92,6 +94,29 @@ const UserController = {
         }
     },
 
+    updateWithToken: async (req, res) => {
+        try {
+            // L'ID vient du token décodé, pas de l'URL !
+            const userIdFromToken = req.user.userId; 
+            // On ne permet de modifier que certains champs pour la sécurité
+            const updates = {
+                name: req.body.name,
+                email: req.body.email
+            };
+
+            const updatedUser = await User.findByIdAndUpdate(
+                userIdFromToken, 
+                { $set: updates }, 
+                { new: true }
+            ).select('-password');
+
+            if (!updatedUser) return res.status(404).json({ error: 'User not found' });
+            
+            res.status(200).json(updatedUser);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
 };
 
 module.exports = UserController;

@@ -16,7 +16,7 @@
 // });
 
 
-//V2
+//V2: middelwares
 // const express = require('express'); // Import the Express framework
 // const app = express();              // Initialize the Express application
 // const port = 9999;                  // Define the server port
@@ -55,11 +55,11 @@
 //   console.log(`Server is successfully running on http://localhost:${port}`);
 // });
 
-// //V3
-// /**
-//  * 1. VARIABLES & CONFIGURATION
-//  * All imports and environment-related variables go here.
-//  */
+// //V3 : add db connection
+/**
+ * 1. VARIABLES & CONFIGURATION
+ * All imports and environment-related variables go here.
+ */
 // const express = require('express');   // Import the Express framework
 // const mongoose = require('mongoose');  // Import Mongoose for MongoDB
 // const app = express();                // Initialize the Express application
@@ -111,7 +111,7 @@
 //   });
 
 
-//V4
+//V4 : add api call
 /**
  * 1. VARIABLES & CONFIGURATION
  * All imports and environment-related variables go here.
